@@ -1,0 +1,23 @@
+{
+  "name": "nexocrat_backend",
+  "version": "1.0.0",
+  "description": "nexocrat_backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "multer": "^2.0.0",
+    "nodemailer": "^7.0.3"
+  }
+}
