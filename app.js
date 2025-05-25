@@ -15,7 +15,6 @@ const httpsOptions = {
     key: fs.readFileSync('/etc/letsencrypt/live/nexocrat.com/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/nexocrat.com/fullchain.pem')
 };
-console.log(httpsOptions,"httpsOptions httpsOptions ");
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -141,6 +140,7 @@ app.post('/nexocrat/contactUs', upload.single('file'), async (req, res) => {
     }
 });
 
-http.createServer(app).listen(PORT, () => {
-  console.log(`🌐 HTTP server running on http://localhost:${PORT}`);
+
+https.createServer(httpsOptions, app).listen(PORT, () => {
+    console.log(`✅ HTTPS Server running at https://nexocrat.com`);
 });
