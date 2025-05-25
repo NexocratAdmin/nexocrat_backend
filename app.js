@@ -11,6 +11,11 @@ const PORT = 3000;
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.get("/", function (req, res) {
+    res.status(200).send("Welcome to nexocrat APIs...");
+});
+
 app.use('/public', express.static(path.join(__dirname, 'public'))); // Serve uploaded files
 
 // Multer Setup for public/uploads
