@@ -8,7 +8,7 @@ const path = require('path');
 require('dotenv').config();
 const http = require('http');
 const app = express();
-const PORT = 443; // HTTPS port
+const PORT = 5000; // HTTPS port
 
 // HTTPS certificate paths (Let's Encrypt)
 const httpsOptions = {
