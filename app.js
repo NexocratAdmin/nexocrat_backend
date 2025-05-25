@@ -15,6 +15,7 @@ const httpsOptions = {
     key: fs.readFileSync('/etc/letsencrypt/live/nexocrat.com/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/nexocrat.com/fullchain.pem')
 };
+console.log(httpsOptions,"httpsOptions httpsOptions ");
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
