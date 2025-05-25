@@ -83,7 +83,7 @@ body {
 </body>
 </html>
 `;
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
     res.send(htmlContent);
 });
 
