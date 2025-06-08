@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
         cb(null, uniqueName);
     }
 });
-const upload = multer({ storage });
+const upload = multer({ dest: 'public/uploads/' });
 
 // Homepage
 const htmlContent = `
@@ -88,31 +88,39 @@ app.get('/test', (req, res) => {
 });
 
 // Contact Form API
-app.post('/nexocrat/contactUs', upload.single('file'), async (req, res) => {
-    const { firstName, lastName, email, message } = req.body;
-    const file = req.file;
+app.post('/nexocrat/contactUs', upload.array('attachments', 10), async (req, res) => {
+  const { firstName, lastName, email, message } = req.body;
+  const files = req.files;
 
-    if (!firstName || !lastName || !email || !message) {
-        return res.status(400).json({ error: 'All fields are required' });
-    }
+  if (!firstName || !lastName || !email || !message) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
 
-    const fileUrl = file ? `https://nexocrat.com/public/uploads/${file.filename}` : null;
+  const fileLinks = files.map(file => ({
+    filename: file.originalname,
+    path: file.path, // Local path for Nodemailer attachment
+  }));
 
-    let transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: 'yudhveersinghvision@gmail.com',
-            pass: 'nknr tcnm pxsf rkno',
-        },
-    });
+  const fileLinksHtml = files.map(file => {
+    const url = `https://nexocrat.com/public/uploads/${file.filename}`;
+    return `<li><a href="${url}" target="_blank" style="color: #28a745;">📎 ${file.originalname}</a></li>`;
+  }).join("");
 
-    let mailOptions = {
-        from: 'yudhveersinghvision@gmail.com',
-        to: 'yudhveersdhillon7@gmail.com',
-        subject: "New Contact Us form Submission",
-        html: `
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'yudhveersinghvision@gmail.com',
+      pass: 'nknr tcnm pxsf rkno',
+    },
+  });
+
+  let mailOptions = {
+    from: 'yudhveersinghvision@gmail.com',
+    to: 'yudhveersdhillon7@gmail.com',
+    subject: "New Contact Us form Submission",
+    html: `
 <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
   <div style="background-color: #004aad; padding: 15px 20px; border-radius: 6px 6px 0 0; color: white;">
     <h2 style="margin: 0;">📩 New Contact Us Form</h2>
@@ -121,23 +129,22 @@ app.post('/nexocrat/contactUs', upload.single('file'), async (req, res) => {
     <p><strong>Name:</strong> ${firstName} ${lastName}</p>
     <p><strong>Email:</strong> <a href="mailto:${email}" style="color: #004aad;">${email}</a></p>
     <p><strong>Message:</strong><br><span style="color: #333;">${message}</span></p>
-    ${fileUrl
-                ? `<p><strong>Uploaded File:</strong><br><a href="${fileUrl}" target="_blank" style="color: #28a745; text-decoration: underline;">📎 Click here to view the file</a></p>`
-                : `<p><strong>Uploaded File:</strong> No file uploaded</p>`}
+    <p><strong>Uploaded Files:</strong><ul>${fileLinksHtml || '<li>No files uploaded</li>'}</ul></p>
     <hr style="margin-top: 30px; border: none; border-top: 1px solid #ddd;" />
     <p style="font-size: 12px; color: #777;">This message was sent from the contact form on the Nexocrat website.</p>
   </div>
 </div>
-        `
-    };
+    `,
+    attachments: fileLinks,
+  };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        res.status(200).json({ message: 'Your Contact Us form has been submitted successfully.' });
-    } catch (err) {
-        console.error('Error sending email:', err.message);
-        res.status(500).json({ error: 'Failed to send email' });
-    }
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: 'Your Contact Us form has been submitted successfully.' });
+  } catch (err) {
+    console.error('Error sending email:', err.message);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
 });
 
 
