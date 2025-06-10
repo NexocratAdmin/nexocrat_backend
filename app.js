@@ -90,6 +90,8 @@ app.get('/test', (req, res) => {
 // Contact Form API
 app.post('/nexocrat/contactUs', upload.array('attachments', 10), async (req, res) => {
   const { firstName, lastName, email, message } = req.body;
+  console.log(req.body,"req.body req.body");
+  
   const files = req.files;
 
   if (!firstName || !lastName || !email || !message) {
