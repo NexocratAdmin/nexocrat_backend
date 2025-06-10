@@ -120,7 +120,7 @@ app.post('/nexocrat/contactUs', upload.array('attachments', 10), async (req, res
 
   let mailOptions = {
     from: 'yudhveersinghvision@gmail.com',
-    to: 'yudhveersdhillon7@gmail.com',
+    to: 'being.nexocrat@gmail.com',
     subject: "New Contact Us form Submission",
     html: `
 <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
