@@ -103,7 +103,7 @@ app.post('/nexocrat/contactUs', upload.array('attachments', 10), async (req, res
     path: file.path, // Local path for Nodemailer attachment
   }));
 
-  const fileLinksHtml = files.map(file => {
+  const fileLinksHtml = files?.map(file => {
     const url = `https://nexocrat.com/public/uploads/${file.filename}`;
     return `<li><a href="${url}" target="_blank" style="color: #28a745;">📎 ${file.originalname}</a></li>`;
   }).join("");
