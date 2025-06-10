@@ -98,7 +98,7 @@ app.post('/nexocrat/contactUs', upload.array('attachments', 10), async (req, res
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  const fileLinks = files.map(file => ({
+  const fileLinks = files?.map(file => ({
     filename: file.originalname,
     path: file.path, // Local path for Nodemailer attachment
   }));
