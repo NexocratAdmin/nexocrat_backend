@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
+const cors = require('cors');
+
 require('dotenv').config();
 const http = require('http');
 const app = express();
@@ -17,6 +19,13 @@ const httpsOptions = {
 };
 
 // Middleware
+app.use(cors());
+// app.use(cors({
+//   origin: ['https://your-frontend-domain.com', 'http://localhost:3000'], // Adjust accordingly
+//   methods: ['GET', 'POST'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+// }));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/public', express.static(path.join(__dirname, 'public')));
